@@ -17,3 +17,12 @@ max(market_date) over(partition by product_id) as last_ordered_date
 from customer_purchases) as demo
 on p.product_id=demo.product_id) as demo1
 on c.product_Category_id = demo1.product_category_id;
+
+
+select demo.product_id,p.product_name,demo.total_sales,demo.last_ordered_date,p.product_category_id from product p
+join
+(select distinct product_id,
+sum(quantity*cost_to_customer_per_qty) over(partition by product_id) as total_sales,
+max(market_date) over(partition by product_id) as last_ordered_date
+from customer_purchases) as demo
+on p.product_id=demo.product_id;
